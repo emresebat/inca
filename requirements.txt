@@ -6,7 +6,7 @@ langchain-google-genai
 textblob         # For sentiment analysis (optional)
 pytest           # For testing
 smolagents
-litellm
+textblob
 # langchain-openai
 # openai
 # faiss-cpu

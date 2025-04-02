@@ -8,9 +8,10 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
-from langchain.schema import messages_to_dict
+# from langchain.schema import messages_to_dictm, messages_from_dict
 from pydantic import BaseModel
 from langchain.output_parsers import PydanticOutputParser
+from textblob import TextBlob
 from prompts import greeting_prompt, user_prompt_template, thanks_prompt_template
 
 
@@ -30,21 +31,22 @@ class SupportStateMachine:
         self.state = ConversationState.COLLECTING
         self.support_info = SupportInfo()
 
-    def validate_order_number(self, input: str) -> str:
+    def validate_order_number(self, input: str) -> bool:
         """
         Extracts a 7 char order number from the provided text.
         Adjust the regex if your order number format differs.
         """
         if not input:
-            return None
+            return False
         match = re.search(r'\bO\d{6}\b', input)
-        return match.group(0) if match else None
+        return match.group(0) != None
 
-    def validate_problem_category(self, input: str) -> str:
+    def validate_problem_category(self, input: str) -> bool:
         """
         Just check if the input is not empty.
         """
-        return input is not None and input.strip()
+        invalid_values = ["none", "null", "n/a", "", "problem", "issue"]
+        return input is not None and input.strip().lower() not in invalid_values
 
     def update_state(self, parsed_support_info: SupportInfo) -> str:
         """
@@ -183,10 +185,24 @@ def dump_conversation_history_to_json_file():
     """
     Dumps the conversation history to a JSON file.
     """
-    # # Load conversation history from memory
+    # Load conversation history from memory
     # memory_vars = memory.load_memory_variables({})
-    # # Get the conversation history
+    # Get the conversation history
     # chat_history = memory_vars.get("history", [])
+
+    # Retrieve the full conversation history as a single string
+    conversation_text = "\n".join([hist['input']
+                                  for hist in structured_history])
+
+    blob = TextBlob(conversation_text)
+    polarity = blob.sentiment.polarity
+    subjectivity = blob.sentiment.subjectivity
+
+    detailed_summary = {
+        "polarity": polarity,
+        "subjectivity": subjectivity,
+        "conversation_history": structured_history
+    }
 
     # # Convert the chat history to a structured format
     # structured_history = messages_to_dict(chat_history)
@@ -196,4 +212,4 @@ def dump_conversation_history_to_json_file():
     os.makedirs(".conversation_history", exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     with open(f".conversation_history/{timestamp}.json", "w") as f:
-        json.dump(structured_history, f, indent=4)
+        json.dump(detailed_summary, f, indent=4)
