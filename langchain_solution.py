@@ -20,7 +20,7 @@ class SupportInfo(BaseModel):
     order_number: Optional[str] = None
     problem_category: Optional[str] = None
     order_status: Optional[str] = None
-
+    language: str = 'English'
 
 class ConversationState(Enum):
     COLLECTING = auto()
@@ -66,18 +66,19 @@ class SupportStateMachine:
 parser = PydanticOutputParser(pydantic_object=SupportInfo)
 
 input_prompt = PromptTemplate(
-    input_variables=["history", "input"],
+    input_variables=["history", "input", "language"],
     template=user_prompt_template,
 )
 
 thanks_prompt = PromptTemplate(
-    input_variables=["history", "order_number", "problem_category"],
+    input_variables=["history", "order_number",
+                     "problem_category", "language"],
     template=thanks_prompt_template,
 )
 
 thanks_with_status_prompt = PromptTemplate(
     input_variables=["history", "order_number",
-                     "problem_category", "order_status"],
+                     "problem_category", "order_status", "language"],
     template=thanks_with_status_prompt_template,
 )
 
@@ -143,7 +144,7 @@ def generate_response(user_input: str) -> str:
     memory_vars = memory.load_memory_variables({})
     # Prepare input for prompt
     chain_input = {"history": memory_vars.get(
-        "history", ""), "input": user_input}
+        "history", ""), "input": user_input, "language": state_machine.support_info.language}
     # Compose the chain using the RunnableSequence syntax
     chain = input_prompt | llm
 
@@ -187,22 +188,23 @@ def thanks() -> str:
 
     # Load conversation history from memory
     memory_vars = memory.load_memory_variables({})
+
+    # Prepare input for prompt
+    chain_input = {"history": memory_vars.get(
+        "history", ""), "order_number": state_machine.support_info.order_number,
+        "problem_category": state_machine.support_info.problem_category,
+        "language": state_machine.support_info.language}
+
+    # Compose the chain using the RunnableSequence syntax
+    chain = thanks_prompt | llm
+
     # Check if the order status was found
     if state_machine.state == ConversationState.STATUS_FOUND:
-        _thanks_prompt = thanks_with_status_prompt
-        # Prepare input for prompt
-        _chain_input = {"history": memory_vars.get(
-            "history", ""), "order_number": state_machine.support_info.order_number, "problem_category": state_machine.support_info.problem_category, "order_status": state_machine.support_info.order_status}
-    else:
-        _thanks_prompt = thanks_prompt
-        # Prepare input for prompt
-        _chain_input = {"history": memory_vars.get(
-            "history", ""), "order_number": state_machine.support_info.order_number, "problem_category": state_machine.support_info.problem_category}
-    # Compose the chain using the RunnableSequence syntax
-    chain = _thanks_prompt | llm
+        chain_input["order_status"] = state_machine.support_info.order_status
+        chain = thanks_with_status_prompt | llm
 
     # Invoke the chain with the prompt
-    raw_response = chain.invoke(_chain_input)
+    raw_response = chain.invoke(chain_input)
 
     # Save the conversation context
     memory.save_context({"input": "None"}, {

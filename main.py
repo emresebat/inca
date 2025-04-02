@@ -10,7 +10,7 @@ def try_langchain():
     print("Starting the INCA with LangChain...")
     print("Type 'exit' or 'quit' to end the conversation.\n")
 
-    print("inca:", greet())
+    print("inca:", generate_response("Hi"))
 
     while is_collecting():
         user_input = input("you: ")
