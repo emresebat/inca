@@ -8,7 +8,7 @@ from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from pydantic import BaseModel
 from langchain.output_parsers import PydanticOutputParser
-from prompts import initial_prompt_template
+from prompts import greeting_prompt, user_prompt_template, thanks_prompt_template
 
 
 class SupportInfo(BaseModel):
@@ -57,13 +57,17 @@ class SupportStateMachine:
                 self.state = ConversationState.FINISHED
 
 
-
 # Create an output parser that expects the above JSON structure.
 parser = PydanticOutputParser(pydantic_object=SupportInfo)
 
-prompt = PromptTemplate(
+input_prompt = PromptTemplate(
     input_variables=["history", "input"],
-    template=initial_prompt_template,
+    template=user_prompt_template,
+)
+
+thanks_prompt = PromptTemplate(
+    input_variables=["history"],
+    template=thanks_prompt_template,
 )
 
 # Set up conversation memory to maintain context
@@ -79,6 +83,20 @@ llm = ChatGoogleGenerativeAI(
 state_machine = SupportStateMachine()
 
 
+def greet() -> str:
+    """
+    Greets the user
+    """
+    # Prepare input for prompt
+    chain_input = [SystemMessage(
+        name="Customer Support Role",
+        content=greeting_prompt),
+        HumanMessage(content="Hi")]
+    # Get the response from the chain
+    response = llm.invoke(chain_input)
+    return response.content
+
+
 def generate_response(user_input: str) -> str:
     # Create a prompt that instructs the LLM to output a JSON with orderNumber and problemCategory
 
@@ -88,7 +106,7 @@ def generate_response(user_input: str) -> str:
     chain_input = {"history": memory_vars.get(
         "history", ""), "input": user_input}
     # Compose the chain using the RunnableSequence syntax
-    chain = prompt | llm
+    chain = input_prompt | llm
 
     # Invoke the chain with the prompt
     raw_response = chain.invoke(chain_input)
@@ -114,15 +132,17 @@ def generate_response(user_input: str) -> str:
         return raw_response_text
 
 
-# def generate_response(user_input: str) -> str:
-#     """
-#     Generates a response from the agent based on user input using LangChain.
-#     """
-#     # Prepare input for prompt
-#     chain_input = [SystemMessage(
-#         name="Customer Support Role",
-#         content="You are a customer support agent. Your goal is to help the customer by gathering the necessary informationby getting the {orderNumber} and {problemCategory} "),
-#         HumanMessage(content=user_input)]
-#     # Get the response from the chain
-#     response = llm.invoke(chain_input)
-#     return response
+def thanks() -> str:
+
+    # Load conversation history from memory
+    memory_vars = memory.load_memory_variables({})
+    # Prepare input for prompt
+    chain_input = {"history": memory_vars.get(
+        "history", ""), "order_number": state_machine.support_info.order_number, "problem_category": state_machine.support_info.problem_category}
+    # Compose the chain using the RunnableSequence syntax
+    chain = thanks_prompt | llm
+
+    # Invoke the chain with the prompt
+    raw_response = chain.invoke(chain_input)
+
+    return raw_response.content

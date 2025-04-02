@@ -6,16 +6,20 @@ from dotenv import load_dotenv
 
 
 def try_langchain():
-    from langchain_solution import generate_response, state_machine
+    from langchain_solution import greet, generate_response, state_machine, ConversationState, thanks
     print("Starting the INCA with LangChain...")
     print("Type 'exit' or 'quit' to end the conversation.\n")
 
-    while state_machine.state != "FINISHED":
-        user_input = input("Customer: ")
+    print("inca:", greet())
+
+    while state_machine.state != ConversationState.FINISHED:
+        user_input = input("you: ")
         if user_input.lower() in ["exit", "quit"]:
             break
         response = generate_response(user_input)
-        print("Agent:", response)
+        print("inca:", response)
+
+    print("inca:", thanks())
 
 
 def try_smolagents():
@@ -24,17 +28,17 @@ def try_smolagents():
     print("Starting the INCA with smolagents...")
     print("Type 'exit' or 'quit' to end the conversation.\n")
     print("Type 'summary' or 'history' to see the conversation history.\n")
-    print("INCA:", incaAgent.run(
+    print("inca:", incaAgent.run(
         "Ask my name and tell me what you can do omitting the greet tool."))
     while True:
 
-        user_input = input("User: ")
+        user_input = input("you: ")
         if user_input.lower() in ["exit", "quit"]:
             break
         if user_input.lower() in ["history", "summary"]:
             print(json.dumps(history, indent=4))
         response = incaAgent.run(user_input)
-        print("INCA:", response)
+        print("inca:", response)
         history.append({"role": "user", "content": user_input})
         history.append({"role": "assistant", "content": response})
 
