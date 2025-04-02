@@ -17,6 +17,12 @@
     python main.py
     ```
 
+* (Optional) Or run with Docker
+    ```
+     docker build -t inca:latest -f ./Dockerfile ./
+     docker run -it --name inca  -e GEMINI_API_KEY=<TOKEN> inca:latest
+    ```
+
 ### System Architecture & Design
 
 It's a basic console app without additional services. I've tried to keep it simple without using Milvus or Faiss for keeping vector store. I've used langchain for parsing the messages and extracting the data using PydanticOutputParser (langchain_solution.py). 
@@ -36,3 +42,4 @@ conversation_history folder has some examples.
 
 Currently all data is kept for a single run and the agent exits, I could have setup another persistent storage, keep session information and provide more details for the user.
 
+Could add a simple UI using streamlit or niceui
