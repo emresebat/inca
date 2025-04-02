@@ -6,21 +6,24 @@ from dotenv import load_dotenv
 
 
 def try_langchain():
-    from langchain_solution import greet, generate_response, state_machine, ConversationState, thanks, dump_conversation_history_to_json_file
+    from langchain_solution import greet, generate_response, is_collecting, thanks, check_order_status, save_history
     print("Starting the INCA with LangChain...")
     print("Type 'exit' or 'quit' to end the conversation.\n")
 
     print("inca:", greet())
 
-    while state_machine.state != ConversationState.COLLECTED:
+    while is_collecting():
         user_input = input("you: ")
         if user_input.lower() in ["exit", "quit"]:
             break
         response = generate_response(user_input)
         print("inca:", response)
 
+    # try to check order status
+    print("inca:", check_order_status())
+
     print("inca:", thanks())
-    dump_conversation_history_to_json_file()
+    save_history()
 
 
 def try_smolagents():

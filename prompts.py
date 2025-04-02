@@ -24,3 +24,12 @@ Current conversation history:
 {history}
 Never provide technical details or troubleshooting steps to the user, your response should be user-friendly.
 """
+
+thanks_with_status_prompt_template = """
+The user already provided the necessary information {order_number} and {problem_category}.
+We found the order status {order_status}.
+Please thank the user and terminate the conversation.
+Current conversation history:
+{history}
+Never provide technical details or troubleshooting steps to the user, your response should be user-friendly.
+"""

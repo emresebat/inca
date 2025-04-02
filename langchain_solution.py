@@ -12,18 +12,20 @@ from langchain.memory import ConversationBufferMemory
 from pydantic import BaseModel
 from langchain.output_parsers import PydanticOutputParser
 from textblob import TextBlob
-from prompts import greeting_prompt, user_prompt_template, thanks_prompt_template
+from prompts import greeting_prompt, user_prompt_template, thanks_prompt_template, thanks_with_status_prompt_template
 
 
 class SupportInfo(BaseModel):
     message: Optional[str] = None
     order_number: Optional[str] = None
     problem_category: Optional[str] = None
+    order_status: Optional[str] = None
 
 
 class ConversationState(Enum):
     COLLECTING = auto()
     COLLECTED = auto()
+    STATUS_FOUND = auto()
 
 
 class SupportStateMachine:
@@ -69,8 +71,14 @@ input_prompt = PromptTemplate(
 )
 
 thanks_prompt = PromptTemplate(
-    input_variables=["history"],
+    input_variables=["history", "order_number", "problem_category"],
     template=thanks_prompt_template,
+)
+
+thanks_with_status_prompt = PromptTemplate(
+    input_variables=["history", "order_number",
+                     "problem_category", "order_status"],
+    template=thanks_with_status_prompt_template,
 )
 
 # Set up conversation memory to maintain context
@@ -93,6 +101,7 @@ def append_history(role: str, input: str, response: str, error: Optional[str] = 
         "output": response,
         "orderNumber": state_machine.support_info.order_number,
         "problemCategory": state_machine.support_info.problem_category,
+        "orderStatus": state_machine.support_info.order_status,
         "error": error
     })
 
@@ -121,6 +130,10 @@ def greet() -> str:
     append_history("ai", greeting_prompt, response.content)
 
     return response.content
+
+
+def is_collecting() -> bool:
+    return state_machine.state != ConversationState.COLLECTED
 
 
 def generate_response(user_input: str) -> str:
@@ -159,18 +172,37 @@ def generate_response(user_input: str) -> str:
         return raw_response_text
 
 
+def check_order_status() -> str:
+    from rag_agent import incaAgent
+    rag_input = f"Check the order status for {state_machine.support_info.order_number}"
+    rag_response = incaAgent.run(rag_input)
+    append_history("ai", rag_input, rag_response)
+    if rag_response != None:
+        state_machine.state = ConversationState.STATUS_FOUND
+        state_machine.support_info.order_status = rag_response
+    return rag_response
+
+
 def thanks() -> str:
 
     # Load conversation history from memory
     memory_vars = memory.load_memory_variables({})
-    # Prepare input for prompt
-    chain_input = {"history": memory_vars.get(
-        "history", ""), "order_number": state_machine.support_info.order_number, "problem_category": state_machine.support_info.problem_category}
+    # Check if the order status was found
+    if state_machine.state == ConversationState.STATUS_FOUND:
+        _thanks_prompt = thanks_with_status_prompt
+        # Prepare input for prompt
+        _chain_input = {"history": memory_vars.get(
+            "history", ""), "order_number": state_machine.support_info.order_number, "problem_category": state_machine.support_info.problem_category, "order_status": state_machine.support_info.order_status}
+    else:
+        _thanks_prompt = thanks_prompt
+        # Prepare input for prompt
+        _chain_input = {"history": memory_vars.get(
+            "history", ""), "order_number": state_machine.support_info.order_number, "problem_category": state_machine.support_info.problem_category}
     # Compose the chain using the RunnableSequence syntax
-    chain = thanks_prompt | llm
+    chain = _thanks_prompt | llm
 
     # Invoke the chain with the prompt
-    raw_response = chain.invoke(chain_input)
+    raw_response = chain.invoke(_chain_input)
 
     # Save the conversation context
     memory.save_context({"input": "None"}, {
@@ -181,7 +213,7 @@ def thanks() -> str:
     return raw_response.content
 
 
-def dump_conversation_history_to_json_file():
+def save_history():
     """
     Dumps the conversation history to a JSON file.
     """
