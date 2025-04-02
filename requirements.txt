@@ -1,0 +1,12 @@
+langchain
+langchain_community
+langchain_huggingface
+langchain-google-genai
+
+textblob         # For sentiment analysis (optional)
+pytest           # For testing
+smolagents
+litellm
+# langchain-openai
+# openai
+# faiss-cpu
