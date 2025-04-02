@@ -1,4 +1,6 @@
+from datetime import datetime
 from enum import Enum, auto
+import json
 import os
 import re
 from typing import Optional
@@ -6,37 +8,43 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
+from langchain.schema import messages_to_dict
 from pydantic import BaseModel
 from langchain.output_parsers import PydanticOutputParser
 from prompts import greeting_prompt, user_prompt_template, thanks_prompt_template
 
 
 class SupportInfo(BaseModel):
-    raw_response: Optional[str] = None
+    message: Optional[str] = None
     order_number: Optional[str] = None
     problem_category: Optional[str] = None
 
 
 class ConversationState(Enum):
-    COLLECTING_ORDER_NUMBER = auto()
-    COLLECTING_PROBLEM_CATEGORY = auto()
-    FINISHED = auto()
+    COLLECTING = auto()
+    COLLECTED = auto()
 
 
 class SupportStateMachine:
     def __init__(self):
-        self.state = ConversationState.COLLECTING_ORDER_NUMBER
+        self.state = ConversationState.COLLECTING
         self.support_info = SupportInfo()
 
     def validate_order_number(self, input: str) -> str:
         """
-        Extracts a 6-digit order number from the provided text.
+        Extracts a 7 char order number from the provided text.
         Adjust the regex if your order number format differs.
         """
         if not input:
             return None
-        match = re.search(r'\b\d{6}\b', input)
+        match = re.search(r'\bO\d{6}\b', input)
         return match.group(0) if match else None
+
+    def validate_problem_category(self, input: str) -> str:
+        """
+        Just check if the input is not empty.
+        """
+        return input is not None and input.strip()
 
     def update_state(self, parsed_support_info: SupportInfo) -> str:
         """
@@ -44,17 +52,10 @@ class SupportStateMachine:
         Returns an appropriate response prompt.
         """
         self.support_info = parsed_support_info
-        if self.state == ConversationState.COLLECTING_ORDER_NUMBER:
-            order = self.validate_order_number(
-                parsed_support_info.order_number)
-            if order:
-                self.state = ConversationState.COLLECTING_PROBLEM_CATEGORY
-
-        elif self.state == ConversationState.COLLECTING_PROBLEM_CATEGORY:
-            # Here we simply assume that any non-empty input is the problem category.
-            if parsed_support_info.problem_category is not None and parsed_support_info.problem_category.strip():
-                self.problem_category = parsed_support_info.problem_category.strip()
-                self.state = ConversationState.FINISHED
+        if self.state == ConversationState.COLLECTING:
+            # Check if both data is collected
+            if self.validate_order_number(parsed_support_info.order_number) and self.validate_problem_category(parsed_support_info.problem_category):
+                self.state = ConversationState.COLLECTED
 
 
 # Create an output parser that expects the above JSON structure.
@@ -76,6 +77,24 @@ memory = ConversationBufferMemory(
     return_messages=True
 )
 
+# Extra dict array to store the conversation history
+structured_history = []
+
+
+def append_history(role: str, input: str, response: str, error: Optional[str] = None):
+    """
+    Appends the conversation history to the structured history.
+    """
+    structured_history.append({
+        "role": role,
+        "input": input,
+        "output": response,
+        "orderNumber": state_machine.support_info.order_number,
+        "problemCategory": state_machine.support_info.problem_category,
+        "error": error
+    })
+
+
 # Setup with system message conversion
 llm = ChatGoogleGenerativeAI(
     model='gemini-2.0-flash-exp',  api_key=os.environ["GEMINI_API_KEY"])
@@ -94,6 +113,11 @@ def greet() -> str:
         HumanMessage(content="Hi")]
     # Get the response from the chain
     response = llm.invoke(chain_input)
+
+    memory.save_context({"input": ""}, {"output": response.content})
+
+    append_history("ai", greeting_prompt, response.content)
+
     return response.content
 
 
@@ -111,7 +135,6 @@ def generate_response(user_input: str) -> str:
     # Invoke the chain with the prompt
     raw_response = chain.invoke(chain_input)
 
-    # Save the conversation context
     memory.save_context({"input": user_input}, {
                         "output": raw_response.content})
 
@@ -124,11 +147,13 @@ def generate_response(user_input: str) -> str:
     # Parse the LLM response using the parser
     try:
         support_info = parser.parse(raw_response_text)
-        # Now you have access to support_info.orderNumber and support_info.problemCategory
-        # You can use these values as needed in your code.
+        # Now we have access to support_info.orderNumber and support_info.problemCategory
         state_machine.update_state(support_info)
-        return support_info.raw_response
+        # Save the conversation context
+        append_history("user", user_input, raw_response_text)
+        return support_info.message
     except Exception as e:
+        append_history("user", user_input, raw_response_text, error=str(e))
         return raw_response_text
 
 
@@ -145,4 +170,30 @@ def thanks() -> str:
     # Invoke the chain with the prompt
     raw_response = chain.invoke(chain_input)
 
+    # Save the conversation context
+    memory.save_context({"input": "None"}, {
+                        "output": raw_response.content})
+
+    append_history("ai", thanks_prompt_template, raw_response.content)
+
     return raw_response.content
+
+
+def dump_conversation_history_to_json_file():
+    """
+    Dumps the conversation history to a JSON file.
+    """
+    # # Load conversation history from memory
+    # memory_vars = memory.load_memory_variables({})
+    # # Get the conversation history
+    # chat_history = memory_vars.get("history", [])
+
+    # # Convert the chat history to a structured format
+    # structured_history = messages_to_dict(chat_history)
+
+    # Save to a JSON file
+    # Ensure the directory exists
+    os.makedirs(".conversation_history", exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    with open(f".conversation_history/{timestamp}.json", "w") as f:
+        json.dump(structured_history, f, indent=4)
