@@ -2,9 +2,8 @@ langchain
 langchain_community
 langchain_huggingface
 langchain-google-genai
-
-textblob         # For sentiment analysis (optional)
-pytest           # For testing
+textblob    # For sentiment analysis (optional)
+pytest
 smolagents
 textblob
 # langchain-openai

@@ -1,0 +1,38 @@
+{
+    "polarity": -0.125,
+    "subjectivity": 0.6,
+    "conversation_history": [
+        {
+            "role": "ai",
+            "input": "\nYou are a customer support agent, you can help the user by gathering the necessary information which their order number and the problem category.\nGreet them politely and ask them to provide their order number and the problem category.\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.",
+            "output": "Hi there! I'm happy to help you today.\n\nTo assist you better, could you please provide me with your order number and the general category of the problem you're experiencing? For example, is it about a delivery issue, a problem with the product, or something else?",
+            "orderNumber": null,
+            "problemCategory": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Hi, my order O123456 is delayed",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"delivery issue\",\n  \"message\": \"Thank you for providing your order number! I understand that your order O123456 is delayed. I'll look into this for you right away.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "delivery issue",
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "Check the order status for O123456",
+            "output": "Delivered",
+            "orderNumber": "O123456",
+            "problemCategory": "delivery issue",
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Thank you for providing the information! We've received your order number and details about the delivery issue. You will be contacted shortly.",
+            "orderNumber": "O123456",
+            "problemCategory": "delivery issue",
+            "error": null
+        }
+    ]
+}

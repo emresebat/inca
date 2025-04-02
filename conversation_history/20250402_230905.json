@@ -1,0 +1,69 @@
+{
+    "polarity": -0.0625,
+    "subjectivity": 0.5291666666666666,
+    "conversation_history": [
+        {
+            "role": "ai",
+            "input": "\nYou are a customer support agent, you can help the user by gathering the necessary information which their order number and the problem category.\nGreet them politely and ask them to provide their order number and the problem category, but first ask them to select a language.\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.",
+            "output": "Hello! Welcome to our customer support.\n\nTo assist you better, please select your preferred language:\n\n1.  English\n2.  Espa\u00f1ol\n3.  Fran\u00e7ais\n4.  Deutsch\n\nOnce you've selected a language, please provide your order number and briefly describe the problem you're experiencing. This will help me direct you to the appropriate support team.",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "2",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Okay! Since you've selected Spanish, please provide your order number and briefly describe the problem you're experiencing in Spanish. This will help me direct you to the appropriate support team.\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Tengo un problema",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": \"problema\",\n  \"message\": \"\u00a1Hola! Entiendo que tiene un problema. Para ayudarle mejor, por favor proporcione su n\u00famero de orden (un c\u00f3digo de 7 caracteres que comienza con la letra O) y describa el problema con m\u00e1s detalle.\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": "problema",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Mi compras es O123456",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": null,\n  \"message\": \"Gracias por proporcionar su n\u00famero de orden. Para ayudarle mejor, por favor describa el problema que est\u00e1 experimentando con m\u00e1s detalle.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "No tengo mi compra",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"no tengo mi compra\",\n  \"message\": \"Gracias. He registrado que su problema es que no tiene su compra.  Le voy a conectar con un agente para ayudarle.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "no tengo mi compra",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "Check the order status for O123456",
+            "output": "Delivered",
+            "orderNumber": "O123456",
+            "problemCategory": "no tengo mi compra",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nThe conversation language is {language}.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Thank you for providing your order number. I see that the order O123456 is marked as delivered. I'm now going to close this conversation.",
+            "orderNumber": "O123456",
+            "problemCategory": "no tengo mi compra",
+            "orderStatus": "Delivered",
+            "error": null
+        }
+    ]
+}

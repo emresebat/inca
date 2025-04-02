@@ -1,0 +1,62 @@
+{
+    "polarity": -0.03571428571428571,
+    "subjectivity": 0.5857142857142856,
+    "conversation_history": [
+        {
+            "role": "ai",
+            "input": "\nYou are a customer support agent, you can help the user by gathering the necessary information which their order number and the problem category.\nGreet them politely and ask them to provide their order number and the problem category.\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.",
+            "output": "Hello! I'm here to help you with your order.\n\nTo assist you better, could you please provide me with your order number and the category of the problem you're experiencing? For example, is it about a delay, a damaged item, or something else?",
+            "orderNumber": null,
+            "problemCategory": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Hi there!",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Hello! I understand you need assistance. To help me assist you better, could you please provide me with your order number and the category of the problem you're experiencing? For example, is it about a delay, a damaged item, or something else?\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "How are you today?",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"I'm doing well, thank you for asking! To help me assist you with your order, could you please provide me with your order number and the category of the problem you're experiencing? For example, is it about a delay, a damaged item, or something else?\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Ok my order is O123456 and I think there is an issue",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"issue\",\n  \"message\": \"Thank you for providing your order number and the problem category. I'll look into the issue with order O123456 right away. Can you please provide more details about the issue you are experiencing?\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "issue",
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "the package is damaged",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": \"damaged package\",\n  \"message\": \"Thank you for letting me know about the damaged package. To help me investigate, could you please provide your order number?\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": "damaged package",
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "You already know the order number",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"damaged package\",\n  \"message\": \"Thank you for confirming that the package for order O123456 is damaged. I'm sorry to hear that! I'll look into this right away. Can you please provide photos of the damaged package?\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "damaged package",
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Thank you for providing the order number and information about the damaged package. We appreciate it. We'll be in touch with you shortly to discuss the next steps.",
+            "orderNumber": "O123456",
+            "problemCategory": "damaged package",
+            "error": null
+        }
+    ]
+}

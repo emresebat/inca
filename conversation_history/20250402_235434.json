@@ -1,0 +1,69 @@
+{
+    "polarity": -0.07142857142857142,
+    "subjectivity": 0.5619047619047619,
+    "conversation_history": [
+        {
+            "role": "ai",
+            "input": "\nYou are a customer support agent, you can help the user by gathering the necessary information which their order number and the problem category.\nGreet them politely and ask them to provide their order number and the problem category, but first ask them to select a language.\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.",
+            "output": "Hello! Welcome to our support service.\n\nTo assist you better, please select your preferred language:\n\n1.  English\n2.  Espa\u00f1ol\n3.  Fran\u00e7ais\n\nOnce you've selected your language, please provide your order number and the category of the problem you're experiencing so I can direct you to the appropriate support team. Thank you!",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "2",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Okay, you've selected Espa\u00f1ol. Please provide your order number and the category of the problem you're experiencing so I can direct you to the appropriate support team. Thank you!\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Ayuda",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Entiendo que necesitas ayuda. Para poder asistirte, por favor, necesito tu n\u00famero de orden (un c\u00f3digo que empieza con la letra 'O' seguido de 6 n\u00fameros) y una breve descripci\u00f3n del problema que est\u00e1s experimentando. \u00a1Gracias!\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Mi compra es O123456",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": null,\n  \"message\": \"Gracias. He registrado tu n\u00famero de orden O123456. Por favor, describe brevemente el problema que est\u00e1s experimentando para que pueda dirigir tu consulta al equipo de soporte adecuado.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "No tengo mi compra en casa",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"delivery issue\",\n  \"message\": \"Gracias. He registrado que no has recibido tu compra. Voy a dirigir tu consulta al equipo de soporte adecuado para que te ayuden con el problema de entrega.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "delivery issue",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "Check the order status for O123456",
+            "output": "Delivered",
+            "orderNumber": "O123456",
+            "problemCategory": "delivery issue",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nYour responses must be in {language}.\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Thank you for providing your order number and details. We've checked the status of order O123456 and it shows as delivered. Thank you for contacting us.",
+            "orderNumber": "O123456",
+            "problemCategory": "delivery issue",
+            "orderStatus": "Delivered",
+            "error": null
+        }
+    ]
+}

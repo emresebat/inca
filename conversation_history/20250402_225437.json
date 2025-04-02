@@ -1,0 +1,51 @@
+{
+    "polarity": -0.125,
+    "subjectivity": 0.6,
+    "conversation_history": [
+        {
+            "role": "ai",
+            "input": "\nYou are a customer support agent, you can help the user by gathering the necessary information which their order number and the problem category.\nGreet them politely and ask them to provide their order number and the problem category.\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.",
+            "output": "Hello! I'm here to help.\n\nTo assist you better, could you please provide me with your order number and the category of the issue you're experiencing? This will help me direct your request to the appropriate team. Thanks!",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Hi there, I want to learn the status of my order",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": \"Order Status\",\n  \"message\": \"Okay, I can help you with checking the status of your order. To proceed, could you please provide your order number? It's a 7-character string that starts with the letter 'O' followed by 6 digits.\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": "Order Status",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "It's O123456 and it's still not delivered",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"Delivery Issue\",\n  \"message\": \"Thank you for providing your order number! I see that you're concerned about your delivery. I'll look into the status of order O123456 for you and provide an update as soon as possible.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "Delivery Issue",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "Check the order status for O123456",
+            "output": "Delivered",
+            "orderNumber": "O123456",
+            "problemCategory": "Delivery Issue",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Thank you for providing the information. Order O123456 has been delivered. Have a great day!",
+            "orderNumber": "O123456",
+            "problemCategory": "Delivery Issue",
+            "orderStatus": "Delivered",
+            "error": null
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+    "polarity": -0.21666666666666667,
+    "subjectivity": 0.5166666666666666,
+    "conversation_history": [
+        {
+            "role": "ai",
+            "input": "\nYou are a customer support agent, you can help the user by gathering the necessary information which their order number and the problem category.\nGreet them politely and ask them to provide their order number and the problem category.\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.",
+            "output": "Hi there! I'm happy to help you today.\n\nTo assist you efficiently, could you please provide me with your order number and the category of the problem you're experiencing? This will help me direct your request to the appropriate team.",
+            "orderNumber": null,
+            "problemCategory": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "this is fucking stupid!",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"I understand your frustration. Could you please provide me with your order number (it starts with the letter 'O' followed by 6 digits) and a brief description of the issue you're encountering? This will help me assist you better.\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "I want my money back!",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": \"refund\",\n  \"message\": \"I understand you're looking for a refund. To process your request, could you please provide your order number? It starts with the letter 'O' followed by 6 digits.\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": "refund",
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "My order O123456 is missing",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"missing order\",\n  \"message\": \"I see that your order O123456 is missing. I can help you with that. I will direct you to the appropriate team.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "missing order",
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Thank you for providing your order number and confirming that your order is missing. We appreciate the information! We will be contacting you shortly to resolve this issue.",
+            "orderNumber": "O123456",
+            "problemCategory": "missing order",
+            "error": null
+        }
+    ]
+}

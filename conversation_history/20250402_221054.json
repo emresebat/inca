@@ -1,0 +1,38 @@
+{
+    "polarity": -0.1357142857142857,
+    "subjectivity": 0.5214285714285715,
+    "conversation_history": [
+        {
+            "role": "ai",
+            "input": "\nYou are a customer support agent, you can help the user by gathering the necessary information which their order number and the problem category.\nGreet them politely and ask them to provide their order number and the problem category.\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.",
+            "output": "Hi there! I'm happy to help you today.\n\nTo assist you efficiently, could you please provide me with your order number and the category of the problem you're experiencing? This will help me direct your request to the appropriate team.",
+            "orderNumber": null,
+            "problemCategory": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Hi there!",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Hi there! Thanks for reaching out. To help me assist you, could you please provide your order number and a brief description of the problem you're experiencing?\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "I have a problem with my order O123456, it's missing",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"missing item\",\n  \"message\": \"Thank you! I see that you're missing an item from order O123456. I'll make sure this gets to the right team to investigate.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "missing item",
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Thank you for providing the order number and information about the missing item. We'll be in touch with you shortly regarding this issue.",
+            "orderNumber": "O123456",
+            "problemCategory": "missing item",
+            "error": null
+        }
+    ]
+}

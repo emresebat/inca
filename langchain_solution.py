@@ -243,7 +243,7 @@ def save_history():
 
     # Save to a JSON file
     # Ensure the directory exists
-    os.makedirs(".conversation_history", exist_ok=True)
+    os.makedirs("conversation_history", exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    with open(f".conversation_history/{timestamp}.json", "w") as f:
+    with open(f"conversation_history/{timestamp}.json", "w") as f:
         json.dump(detailed_summary, f, indent=4)

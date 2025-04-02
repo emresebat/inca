@@ -1,0 +1,60 @@
+{
+    "polarity": -0.15,
+    "subjectivity": 0.5,
+    "conversation_history": [
+        {
+            "role": "user",
+            "input": "Hi",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Hello! To assist you better, could you please select your preferred language? After that, please provide your order number (it starts with the letter 'O' followed by 6 digits) and a brief description of the issue you're experiencing.\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "My language is Spanish",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"\u00a1Hola! Gracias por informarnos que prefiere espa\u00f1ol. Para poder ayudarle, por favor, proporci\u00f3neme su n\u00famero de orden (comienza con la letra 'O' seguida de 6 d\u00edgitos) y una breve descripci\u00f3n del problema que est\u00e1 experimentando.\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Mi compra es O123456",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": null,\n  \"message\": \"Gracias. He registrado el n\u00famero de orden O123456. Por favor, describa brevemente el problema que est\u00e1 experimentando para que pueda ayudarle de la mejor manera.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Mi compra tengo mal condicion",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"mal condicion\",\n  \"message\": \"Gracias. He registrado el n\u00famero de orden O123456 y que el producto lleg\u00f3 en malas condiciones. Por favor, dame m\u00e1s detalles sobre el problema.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "mal condicion",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "Check the order status for O123456",
+            "output": "Delivered",
+            "orderNumber": "O123456",
+            "problemCategory": "mal condicion",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nYour responses must be in {language}.\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Based on the information provided, order O123456 has been delivered. Thank you for contacting us!",
+            "orderNumber": "O123456",
+            "problemCategory": "mal condicion",
+            "orderStatus": "Delivered",
+            "error": null
+        }
+    ]
+}
