@@ -6,6 +6,7 @@ textblob    # For sentiment analysis (optional)
 pytest
 smolagents
 textblob
+rich # for fancy terminal
 # langchain-openai
 # openai
 # faiss-cpu

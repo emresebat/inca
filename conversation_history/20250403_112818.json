@@ -1,0 +1,24 @@
+{
+    "polarity": -0.1875,
+    "subjectivity": 0.625,
+    "conversation_history": [
+        {
+            "role": "user",
+            "input": "Hi",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Hello! To assist you better, please select your preferred language from the following options: [English, Spanish]. Once you've chosen a language, kindly provide your order number and a brief description of the problem you're experiencing.\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nYour responses must be in {language}.\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Thank you for providing that information! We'll be in touch with you shortly.",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        }
+    ]
+}

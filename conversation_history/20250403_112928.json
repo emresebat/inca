@@ -1,0 +1,60 @@
+{
+    "polarity": -0.1875,
+    "subjectivity": 0.625,
+    "conversation_history": [
+        {
+            "role": "user",
+            "input": "Hi",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Hello! To assist you better, could you please select your preferred language from the following options: [English, Spanish, Turkish]?\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Turkish",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Merhaba! I can assist you in Turkish. Could you please provide your order number (it starts with 'O' and is followed by 6 digits) and briefly describe the problem you are experiencing?\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "Derdim var",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": \"Derdim var\",\n  \"message\": \"Anl\u0131yorum, bir sorununuz var. Sipari\u015f numaran\u0131z\u0131 (O harfi ile ba\u015flayan ve 6 haneli bir say\u0131dan olu\u015fan) da iletebilir misiniz l\u00fctfen?\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": "Derdim var",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "user",
+            "input": "O123456 nolu siparisim bana ulasmadi",
+            "output": "```json\n{\n  \"order_number\": \"O123456\",\n  \"problem_category\": \"bana ulasmadi\",\n  \"message\": \"Sipari\u015f numaran\u0131z ve sorununuz iletildi. En k\u0131sa s\u00fcrede size yard\u0131mc\u0131 olaca\u011f\u0131z.\"\n}\n```",
+            "orderNumber": "O123456",
+            "problemCategory": "bana ulasmadi",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "Check the order status for O123456",
+            "output": "Delivered",
+            "orderNumber": "O123456",
+            "problemCategory": "bana ulasmadi",
+            "orderStatus": null,
+            "error": null
+        },
+        {
+            "role": "ai",
+            "input": "\nYour responses must be in {language}.\nThe user already provided the necessary information {order_number} and {problem_category}.\nPlease thank the user for providing the information and let them know that they will be contacted shortly.\nCurrent conversation history:\n{history}\nNever provide technical details or troubleshooting steps to the user, your response should be user-friendly.\n",
+            "output": "Sipari\u015finizin teslim edildi\u011fini g\u00f6r\u00fcyoruz. Yard\u0131mlar\u0131n\u0131z i\u00e7in te\u015fekk\u00fcr ederiz! \u0130yi g\u00fcnler dileriz.",
+            "orderNumber": "O123456",
+            "problemCategory": "bana ulasmadi",
+            "orderStatus": "Delivered",
+            "error": null
+        }
+    ]
+}

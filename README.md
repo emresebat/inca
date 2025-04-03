@@ -25,9 +25,9 @@
 
 ### System Architecture & Design
 
-It's a basic console app without additional services. I've tried to keep it simple without using Milvus or Faiss for keeping vector store. I've used langchain for parsing the messages and extracting the data using PydanticOutputParser (langchain_solution.py). 
+It's a basic console app without additional services. I've tried to keep it simple without using Milvus or Faiss for keeping vector store. I've used langchain for parsing the messages and extracting the data using PydanticOutputParser (langchain_flow.py). 
 
-I've also tried another scenario using only smolagents (smolagent_solution_.py) but even it's promising it needs work.
+I've also tried another scenario using only smolagents (smolagent_flow.py) but even it's promising it needs work.
 I've later added a RAG example using smolagent custom tool to simulate getting data from a data store, it decides which tool to use.
 
 I've used a state machine to decide if the agent had the required information or not, until correct data is received the agent keeps askind order number and problem details.

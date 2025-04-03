@@ -3,46 +3,53 @@ import getpass
 import json
 import os
 from dotenv import load_dotenv
+from rich.console import Console
+from rich.prompt import Prompt
+
+console = Console()
+inca_icon = ":crystal_ball:"
+user_icon = ":blond-haired_person:"
 
 
-def try_langchain():
-    from langchain_solution import greet, generate_response, is_collecting, thanks, check_order_status, save_history
-    print("Starting the INCA with LangChain...")
-    print("Type 'exit' or 'quit' to end the conversation.\n")
+def langchain_flow():
+    from langchain_flow import generate_response, is_collecting, thanks, check_order_status, save_history
 
-    print("inca:", generate_response("Hi"))
+    console.print(inca_icon, generate_response("Hi"))
+
+    exiting = False
 
     while is_collecting():
-        user_input = input("you: ")
+        user_input = Prompt.ask(user_icon)
         if user_input.lower() in ["exit", "quit"]:
+            exiting = True
             break
         response = generate_response(user_input)
-        print("inca:", response)
+        console.print(inca_icon, response)
 
-    # try to check order status
-    print("inca:", check_order_status())
+    if not exiting:
+        # try to check order status
+        console.print(inca_icon, check_order_status())
+        console.print(inca_icon, thanks())
 
-    print("inca:", thanks())
     save_history()
 
 
-def try_smolagents():
-    from smolagents_solution import incaAgent
+def smolagents_flow():
+    from smolagents_flow import incaAgent
     history = []
-    print("Starting the INCA with smolagents...")
-    print("Type 'exit' or 'quit' to end the conversation.\n")
-    print("Type 'summary' or 'history' to see the conversation history.\n")
-    print("inca:", incaAgent.run(
+    console.print(
+        "Type 'summary' or 'history' to see the conversation history.\n")
+    console.print(inca_icon, incaAgent.run(
         "Ask my name and tell me what you can do omitting the greet tool."))
     while True:
 
-        user_input = input("you: ")
+        user_input = Prompt.ask(user_icon)
         if user_input.lower() in ["exit", "quit"]:
             break
         if user_input.lower() in ["history", "summary"]:
             print(json.dumps(history, indent=4))
         response = incaAgent.run(user_input)
-        print("inca:", response)
+        console.print(inca_icon, response)
         history.append({"role": "user", "content": user_input})
         history.append({"role": "assistant", "content": response})
 
@@ -53,7 +60,15 @@ def main():
         os.environ['GEMINI_API_KEY'] = getpass.getpass(
             'Provide your Gemini API Key: ')
 
-    try_langchain()
+    console.rule("[bold red]-")
+    console.print(
+        "[bold pink]INCA[/bold pink]!", inca_icon, justify="center")
+    console.print(
+        "Type 'exit' or 'quit' to end the conversation.", justify="center")
+    console.rule("[bold red]-")
+    console.print()
+
+    langchain_flow()
 
 
 if __name__ == "__main__":

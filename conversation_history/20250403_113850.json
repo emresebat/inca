@@ -1,0 +1,15 @@
+{
+    "polarity": 0.0,
+    "subjectivity": 0.0,
+    "conversation_history": [
+        {
+            "role": "user",
+            "input": "Hi",
+            "output": "```json\n{\n  \"order_number\": null,\n  \"problem_category\": null,\n  \"message\": \"Hello! To assist you better, could you please select your preferred language from the following options: [English, Spanish, Turkish]?\"\n}\n```",
+            "orderNumber": null,
+            "problemCategory": null,
+            "orderStatus": null,
+            "error": null
+        }
+    ]
+}

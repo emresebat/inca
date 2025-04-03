@@ -1,5 +1,5 @@
 import os
-from smolagents import Tool, HfApiModel, ToolCallingAgent, LiteLLMModel, OpenAIServerModel
+from smolagents import Tool,  ToolCallingAgent,  OpenAIServerModel
 
 
 class DistanceCalculatorTool(Tool):
